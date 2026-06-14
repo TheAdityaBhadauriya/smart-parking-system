@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SmartPark — Dashboard</title>
+    <link rel="stylesheet" href="frontend/static/css/style.css">
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar">
+    <h1>🅿️ SmartPark</h1>
+    <div>
+        <span id="user-name">Welcome!</span>
+        <a href="bookings.html">My Bookings</a>
+        <a href="#" onclick="logout()">Logout</a>
+    </div>
+</nav>
+
+<div class="container">
+
+    <!-- PAGE TITLE -->
+    <div class="page-title">Parking Dashboard</div>
+    <div class="page-subtitle">Click on an available slot to book it</div>
+
+    <!-- STATS BAR -->
+    <div class="stats-bar">
+        <div class="stat-card">
+            <div class="number" id="total-slots">0</div>
+            <div class="label">Total Slots</div>
+        </div>
+        <div class="stat-card">
+            <div class="number" id="available-slots" style="color:#11998e">0</div>
+            <div class="label">Available</div>
+        </div>
+        <div class="stat-card">
+            <div class="number" id="occupied-slots" style="color:#eb3349">0</div>
+            <div class="label">Occupied</div>
+        </div>
+    </div>
+
+    <!-- LEGEND -->
+    <div class="legend">
+        <div class="legend-item">
+            <div class="legend-dot available"></div> Available
+        </div>
+        <div class="legend-item">
+            <div class="legend-dot occupied"></div> Occupied
+        </div>
+        <div class="legend-item">
+            <div class="legend-dot ev"></div> EV Charging
+        </div>
+        <div class="legend-item">
+            <div class="legend-dot disabled"></div> Disabled
+        </div>
+    </div>
+
+    <!-- PARKING SLOTS -->
+    <div id="slots-container"></div>
+
+</div>
+
+<!-- BOOKING MODAL -->
+<div class="modal-overlay" id="booking-modal">
+    <div class="modal">
+        <h3>Book Slot <span id="modal-slot-number"></span></h3>
+        <p>Enter your vehicle details to confirm booking</p>
+
+        <div class="alert" id="modal-alert"></div>
+
+        <div class="form-group">
+            <label>Vehicle Number</label>
+            <input type="text" id="vehicle-number" placeholder="e.g. UP32 AB 1234">
+        </div>
+        <div class="form-group">
+            <label>Slot Type</label>
+            <input type="text" id="modal-slot-type" disabled>
+        </div>
+        <div class="form-group">
+            <label>Floor</label>
+            <input type="text" id="modal-slot-floor" disabled>
+        </div>
+
+        <div class="modal-buttons">
+            <button class="btn btn-secondary" onclick="closeModal()">Cancel</button>
+            <button class="btn btn-success" onclick="confirmBooking()">Confirm Booking</button>
+        </div>
+    </div>
+</div>
+
+<script src="frontend/static/js/dashboard.js"></script>
+</body>
+</html>
