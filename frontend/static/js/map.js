@@ -101,9 +101,20 @@ function openModal(slot) {
     document.getElementById('modal-slot-floor').value        = `Floor ${slot.floor}`;
     document.getElementById('vehicle-number').value          = '';
     document.getElementById('modal-alert').className         = 'alert';
+
+    const today = new Date().toISOString().split('T')[0];
+    document.getElementById('booking-date').min   = today;
+    document.getElementById('booking-date').value = today;
+
+    const now = new Date();
+    const h   = String(now.getHours()).padStart(2, '0');
+    const m   = String(now.getMinutes()).padStart(2, '0');
+    const h2  = String((now.getHours() + 1) % 24).padStart(2, '0');
+    document.getElementById('start-time').value = `${h}:${m}`;
+    document.getElementById('end-time').value   = `${h2}:${m}`;
+
     document.getElementById('booking-modal').classList.add('active');
 }
-
 function closeModal() {
     document.getElementById('booking-modal').classList.remove('active');
     selectedSlot = null;
@@ -112,10 +123,20 @@ function closeModal() {
 // ── CONFIRM BOOKING ────────────────────────────────────
 async function confirmBooking() {
     const vehicleNumber = document.getElementById('vehicle-number').value.trim();
+    const bookingDate   = document.getElementById('booking-date').value;
+    const startTime     = document.getElementById('start-time').value;
+    const endTime       = document.getElementById('end-time').value;
 
-    if (!vehicleNumber) {
+    if (!vehicleNumber || !bookingDate || !startTime || !endTime) {
         const alertEl = document.getElementById('modal-alert');
-        alertEl.textContent = 'Please enter your vehicle number';
+        alertEl.textContent = 'Please fill in all fields';
+        alertEl.className   = 'alert alert-error show';
+        return;
+    }
+
+    if (startTime >= endTime) {
+        const alertEl = document.getElementById('modal-alert');
+        alertEl.textContent = 'End time must be after start time';
         alertEl.className   = 'alert alert-error show';
         return;
     }
@@ -127,7 +148,10 @@ async function confirmBooking() {
             body:    JSON.stringify({
                 user_id:        user.id,
                 slot_id:        selectedSlot.id,
-                vehicle_number: vehicleNumber
+                vehicle_number: vehicleNumber,
+                booking_date:   bookingDate,
+                start_time:     startTime,
+                end_time:       endTime
             })
         });
         const data = await res.json();
