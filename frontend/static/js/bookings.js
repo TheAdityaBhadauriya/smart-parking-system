@@ -39,8 +39,8 @@ async function loadBookings() {
                 <td><span class="badge badge-${b.status}">${b.status}</span></td>
                 <td>
                     ${b.status === 'active'
-                        ? `<button class="btn btn-danger" style="padding:6px 14px; font-size:12px"
-                            onclick="checkout(${b.id})">Checkout</button>`
+                        ? `<a href="payment.html?booking_id=${b.id}" class="btn btn-success" 
+    style="padding:6px 14px; font-size:12px; text-decoration:none">💳 Pay & Checkout</a>`
                         : '—'
                     }
                 </td>

@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ParkEase — Admin Panel</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+    <link rel="stylesheet" href="/static/css/admin.css">
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar">
+    <h1>👑 ParkEase Admin</h1>
+    <div>
+        <span id="user-name"></span>
+        <a href="dashboard.html">User View</a>
+        <a href="#" onclick="logout()">Logout</a>
+    </div>
+</nav>
+
+<div class="admin-layout">
+
+    <!-- SIDEBAR -->
+    <div class="sidebar">
+        <div class="sidebar-item active" onclick="showTab('overview')">
+            📊 Overview
+        </div>
+        <div class="sidebar-item" onclick="showTab('bookings')">
+            📋 Bookings
+        </div>
+        <div class="sidebar-item" onclick="showTab('slots')">
+            🅿️ Manage Slots
+        </div>
+        <div class="sidebar-item" onclick="showTab('users')">
+            👥 Users
+        </div>
+        <div class="sidebar-item" onclick="showTab('revenue')">
+            💰 Revenue
+        </div>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div class="admin-main">
+
+        <!-- ── OVERVIEW TAB ── -->
+        <div id="tab-overview" class="tab-content active">
+            <div class="page-title">📊 Dashboard Overview</div>
+            <div class="page-subtitle">Live stats of your parking system</div>
+
+            <div class="admin-stats">
+                <div class="admin-stat-card purple">
+                    <div class="stat-icon">👥</div>
+                    <div class="stat-number" id="stat-users">0</div>
+                    <div class="stat-label">Total Users</div>
+                </div>
+                <div class="admin-stat-card green">
+                    <div class="stat-icon">🟢</div>
+                    <div class="stat-number" id="stat-available">0</div>
+                    <div class="stat-label">Available Slots</div>
+                </div>
+                <div class="admin-stat-card red">
+                    <div class="stat-icon">🔴</div>
+                    <div class="stat-number" id="stat-occupied">0</div>
+                    <div class="stat-label">Occupied Slots</div>
+                </div>
+                <div class="admin-stat-card blue">
+                    <div class="stat-icon">📋</div>
+                    <div class="stat-number" id="stat-bookings">0</div>
+                    <div class="stat-label">Total Bookings</div>
+                </div>
+                <div class="admin-stat-card orange">
+                    <div class="stat-icon">⚡</div>
+                    <div class="stat-number" id="stat-active">0</div>
+                    <div class="stat-label">Active Bookings</div>
+                </div>
+                <div class="admin-stat-card gold">
+                    <div class="stat-icon">💰</div>
+                    <div class="stat-number" id="stat-revenue">₹0</div>
+                    <div class="stat-label">Total Revenue</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ── BOOKINGS TAB ── -->
+        <div id="tab-bookings" class="tab-content">
+            <div class="page-title">📋 All Bookings</div>
+            <div class="page-subtitle">View and filter all parking bookings</div>
+
+            <!-- Filter -->
+            <div class="filter-bar">
+                <button class="filter-btn active" onclick="filterBookings('')">All</button>
+                <button class="filter-btn" onclick="filterBookings('active')">Active</button>
+                <button class="filter-btn" onclick="filterBookings('completed')">Completed</button>
+                <button class="filter-btn" onclick="filterBookings('cancelled')">Cancelled</button>
+            </div>
+
+            <div class="card">
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>User</th>
+                                <th>Slot</th>
+                                <th>Vehicle</th>
+                                <th>Check In</th>
+                                <th>Check Out</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody id="bookings-tbody"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- ── SLOTS TAB ── -->
+        <div id="tab-slots" class="tab-content">
+            <div class="page-title">🅿️ Manage Slots</div>
+            <div class="page-subtitle">Add or remove parking slots</div>
+
+            <!-- Add Slot Form -->
+            <div class="card">
+                <h3 style="margin-bottom:15px">➕ Add New Slot</h3>
+                <div class="add-slot-form">
+                    <div class="form-group">
+                        <label>Slot Number</label>
+                        <input type="text" id="new-slot-number" placeholder="e.g. C1">
+                    </div>
+                    <div class="form-group">
+                        <label>Type</label>
+                        <select id="new-slot-type">
+                            <option value="regular">Regular</option>
+                            <option value="disabled">Disabled</option>
+                            <option value="ev">EV Charging</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Floor</label>
+                        <select id="new-slot-floor">
+                            <option value="1">Floor 1</option>
+                            <option value="2">Floor 2</option>
+                            <option value="3">Floor 3</option>
+                        </select>
+                    </div>
+                    <button class="btn btn-primary" onclick="addSlot()">Add Slot</button>
+                </div>
+                <div class="alert" id="slot-alert"></div>
+            </div>
+
+            <!-- Slots Table -->
+            <div class="card">
+                <h3 style="margin-bottom:15px">All Slots</h3>
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Slot</th>
+                                <th>Type</th>
+                                <th>Floor</th>
+                                <th>Status</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="slots-tbody"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- ── USERS TAB ── -->
+        <div id="tab-users" class="tab-content">
+            <div class="page-title">👥 All Users</div>
+            <div class="page-subtitle">Registered users on the platform</div>
+
+            <div class="card">
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Name</th>
+                                <th>Email</th>
+                                <th>Role</th>
+                                <th>Bookings</th>
+                                <th>Joined</th>
+                            </tr>
+                        </thead>
+                        <tbody id="users-tbody"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- ── REVENUE TAB ── -->
+        <div id="tab-revenue" class="tab-content">
+            <div class="page-title">💰 Revenue Report</div>
+            <div class="page-subtitle">All payment transactions</div>
+
+            <div class="card">
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>User</th>
+                                <th>Slot</th>
+                                <th>Vehicle</th>
+                                <th>Amount</th>
+                                <th>Status</th>
+                                <th>Date</th>
+                            </tr>
+                        </thead>
+                        <tbody id="revenue-tbody"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script src="/static/js/admin.js"></script>
+</body>
+</html>

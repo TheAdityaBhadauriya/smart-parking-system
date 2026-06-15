@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ParkEase — Payment</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+    <link rel="stylesheet" href="/static/css/payment.css">
+</head>
+<body>
+
+<nav class="navbar">
+    <h1>🅿️ ParkEase</h1>
+    <div>
+        <span id="user-name">Welcome!</span>
+        <a href="dashboard.html">Dashboard</a>
+        <a href="bookings.html">My Bookings</a>
+        <a href="#" onclick="logout()">Logout</a>
+    </div>
+</nav>
+
+<div class="container">
+    <div class="payment-wrapper">
+
+        <!-- BILL CARD -->
+        <div class="bill-card" id="bill-card">
+
+            <!-- BILL HEADER -->
+            <div class="bill-header">
+                <div class="bill-logo">🅿️</div>
+                <div class="bill-business">ParkEase</div>
+                <div class="bill-tagline">Smart Parking Solution</div>
+            </div>
+
+            <div class="bill-divider">- - - - - - - - - - - - - - - - - - - -</div>
+
+            <!-- BILL DETAILS -->
+            <div class="bill-section">
+                <div class="bill-title">🧾 PARKING RECEIPT</div>
+
+                <div class="bill-row">
+                    <span>Booking ID</span>
+                    <span id="bill-booking-id">—</span>
+                </div>
+                <div class="bill-row">
+                    <span>Slot Number</span>
+                    <span id="bill-slot">—</span>
+                </div>
+                <div class="bill-row">
+                    <span>Floor</span>
+                    <span id="bill-floor">—</span>
+                </div>
+                <div class="bill-row">
+                    <span>Vehicle</span>
+                    <span id="bill-vehicle">—</span>
+                </div>
+                <div class="bill-row">
+                    <span>Check In</span>
+                    <span id="bill-checkin">—</span>
+                </div>
+                <div class="bill-row">
+                    <span>Duration</span>
+                    <span id="bill-duration">—</span>
+                </div>
+            </div>
+
+            <div class="bill-divider">- - - - - - - - - - - - - - - - - - - -</div>
+
+            <!-- AMOUNT -->
+            <div class="bill-amount-section">
+                <div class="bill-row">
+                    <span>Base Rate</span>
+                    <span id="bill-base-rate">—</span>
+                </div>
+                <div class="bill-row">
+                    <span>Duration Charge</span>
+                    <span id="bill-duration-charge">—</span>
+                </div>
+                <div class="bill-row total-row">
+                    <span>TOTAL</span>
+                    <span id="bill-total">—</span>
+                </div>
+            </div>
+
+            <div class="bill-divider">- - - - - - - - - - - - - - - - - - - -</div>
+
+            <!-- PAY BUTTON -->
+            <div class="bill-footer">
+                <div class="alert" id="payment-alert"></div>
+                <button class="btn btn-success pay-btn" id="pay-btn" onclick="initiatePayment()">
+                    💳 Pay Now
+                </button>
+                <div class="secure-badge">🔒 Secured by Razorpay</div>
+            </div>
+
+        </div>
+
+        <!-- SUCCESS CARD (hidden initially) -->
+        <div class="success-card" id="success-card" style="display:none">
+            <div class="success-icon">✅</div>
+            <h2>Payment Successful!</h2>
+            <p>Your parking session has been completed.</p>
+            <div class="success-details">
+                <div class="bill-row">
+                    <span>Payment ID</span>
+                    <span id="success-payment-id">—</span>
+                </div>
+                <div class="bill-row">
+                    <span>Amount Paid</span>
+                    <span id="success-amount">—</span>
+                </div>
+            </div>
+            <button class="btn btn-primary" onclick="window.location.href='bookings.html'"
+                style="width:100%; margin-top:20px">
+                View My Bookings
+            </button>
+            <button class="btn btn-secondary" onclick="window.location.href='dashboard.html'"
+                style="width:100%; margin-top:10px">
+                Back to Dashboard
+            </button>
+        </div>
+
+    </div>
+</div>
+
+<!-- Razorpay SDK -->
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+<script src="/static/js/payment.js"></script>
+</body>
+</html>

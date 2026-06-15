@@ -14,6 +14,7 @@
     <div>
         <span id="user-name">Welcome!</span>
         <a href="map.html">🗺️ Map View</a>
+        <a href="admin.html" id="admin-link" style="display:none">👑 Admin</a>
         <a href="bookings.html">My Bookings</a>
         <a href="#" onclick="logout()">Logout</a>
     </div>
@@ -91,5 +92,11 @@
 </div>
 
 <script src="/static/js/dashboard.js"></script>
+<script>
+    const u = JSON.parse(localStorage.getItem('user'));
+    if (u && u.role === 'admin') {
+        document.getElementById('admin-link').style.display = 'inline';
+    }
+</script>
 </body>
 </html>
