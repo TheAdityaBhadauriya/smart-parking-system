@@ -3,8 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SmartPark — Dashboard</title>
+    <title>SmartPark — Parking Map</title>
     <link rel="stylesheet" href="/static/css/style.css">
+    <link rel="stylesheet" href="/static/css/map.css">
 </head>
 <body>
 
@@ -13,7 +14,7 @@
     <h1>🅿️ SmartPark</h1>
     <div>
         <span id="user-name">Welcome!</span>
-        <a href="map.html">🗺️ Map View</a>
+        <a href="dashboard.html">Dashboard</a>
         <a href="bookings.html">My Bookings</a>
         <a href="#" onclick="logout()">Logout</a>
     </div>
@@ -21,9 +22,8 @@
 
 <div class="container">
 
-    <!-- PAGE TITLE -->
-    <div class="page-title">Parking Dashboard</div>
-    <div class="page-subtitle">Click on an available slot to book it</div>
+    <div class="page-title">🗺️ Parking Lot Map</div>
+    <div class="page-subtitle">Visual overview of all parking slots — click a green slot to book</div>
 
     <!-- STATS BAR -->
     <div class="stats-bar">
@@ -41,24 +41,44 @@
         </div>
     </div>
 
-    <!-- LEGEND -->
-    <div class="legend">
-        <div class="legend-item">
-            <div class="legend-dot available"></div> Available
-        </div>
-        <div class="legend-item">
-            <div class="legend-dot occupied"></div> Occupied
-        </div>
-        <div class="legend-item">
-            <div class="legend-dot ev"></div> EV Charging
-        </div>
-        <div class="legend-item">
-            <div class="legend-dot disabled"></div> Disabled
-        </div>
+    <!-- FLOOR SWITCHER -->
+    <div class="floor-switcher">
+        <button class="floor-btn active" onclick="switchFloor(1)">Floor 1</button>
+        <button class="floor-btn" onclick="switchFloor(2)">Floor 2</button>
     </div>
 
-    <!-- PARKING SLOTS -->
-    <div id="slots-container"></div>
+    <!-- LEGEND -->
+    <div class="legend">
+        <div class="legend-item"><div class="legend-dot available"></div> Available</div>
+        <div class="legend-item"><div class="legend-dot occupied"></div> Occupied</div>
+        <div class="legend-item"><div class="legend-dot ev"></div> EV Charging</div>
+        <div class="legend-item"><div class="legend-dot disabled"></div> Disabled</div>
+    </div>
+
+    <!-- MAP -->
+    <div class="map-wrapper">
+        <div class="map-container" id="map-container">
+
+            <!-- ENTRANCE -->
+            <div class="entrance-marker">
+                <div class="entrance-arrow">▼</div>
+                <div class="entrance-label">ENTRANCE</div>
+            </div>
+
+            <!-- SLOTS RENDERED BY JS -->
+            <div class="map-grid" id="map-grid"></div>
+
+            <!-- LANE LABEL -->
+            <div class="lane-label">◄ DRIVING LANE ►</div>
+
+            <!-- EXIT -->
+            <div class="exit-marker">
+                <div class="exit-label">EXIT</div>
+                <div class="exit-arrow">▼</div>
+            </div>
+
+        </div>
+    </div>
 
 </div>
 
@@ -90,6 +110,6 @@
     </div>
 </div>
 
-<script src="/static/js/dashboard.js"></script>
+<script src="/static/js/map.js"></script>
 </body>
 </html>

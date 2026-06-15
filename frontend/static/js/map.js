@@ -1,0 +1,156 @@
+const API = 'http://127.0.0.1:5000';
+
+// ── CHECK LOGIN ────────────────────────────────────────
+const user = JSON.parse(localStorage.getItem('user'));
+if (!user) window.location.href = 'index.html';
+document.getElementById('user-name').textContent = `👤 ${user.name}`;
+
+function logout() {
+    localStorage.removeItem('user');
+    window.location.href = 'index.html';
+}
+
+// ── STATE ──────────────────────────────────────────────
+let allSlots     = [];
+let selectedSlot = null;
+let currentFloor = 1;
+
+// ── SLOT ICONS ─────────────────────────────────────────
+function getIcon(slot) {
+    if (slot.slot_type === 'ev')       return '⚡';
+    if (slot.slot_type === 'disabled') return '♿';
+    if (slot.status === 'occupied')    return '🚗';
+    return '🅿️';
+}
+
+// ── GET CSS CLASS ──────────────────────────────────────
+function getSlotClass(slot) {
+    if (slot.status === 'occupied') return 'occupied';
+    if (slot.slot_type === 'ev')       return 'ev-available';
+    if (slot.slot_type === 'disabled') return 'disabled-available';
+    return 'available';
+}
+
+// ── LOAD SLOTS ─────────────────────────────────────────
+async function loadSlots() {
+    try {
+        const res = await fetch(`${API}/api/slots`);
+        allSlots  = await res.json();
+
+        // Update stats
+        const available = allSlots.filter(s => s.status === 'available').length;
+        const occupied  = allSlots.filter(s => s.status === 'occupied').length;
+        document.getElementById('total-slots').textContent     = allSlots.length;
+        document.getElementById('available-slots').textContent = available;
+        document.getElementById('occupied-slots').textContent  = occupied;
+
+        renderMap(currentFloor);
+
+    } catch (err) {
+        console.error('Error loading slots:', err);
+    }
+}
+
+// ── RENDER MAP ─────────────────────────────────────────
+function renderMap(floor) {
+    const grid        = document.getElementById('map-grid');
+    const floorSlots  = allSlots.filter(s => s.floor === floor);
+    grid.innerHTML    = '';
+
+    floorSlots.forEach(slot => {
+        const slotClass = getSlotClass(slot);
+        const icon      = getIcon(slot);
+        const isBookable = slot.status === 'available';
+        const statusText = slot.status === 'available' ? '✅ Free' : '🔴 Taken';
+        const tooltipText = isBookable ? 'Click to book' : 'Already occupied';
+
+        const card = document.createElement('div');
+        card.className = `map-slot ${slotClass}`;
+        card.innerHTML = `
+            <div class="tooltip">${tooltipText}</div>
+            <div class="map-slot-icon">${icon}</div>
+            <div class="map-slot-number">${slot.slot_number}</div>
+            <div class="map-slot-type">${slot.slot_type}</div>
+            <div class="map-slot-status">${statusText}</div>
+        `;
+
+        if (isBookable) {
+            card.onclick = () => openModal(slot);
+        }
+
+        grid.appendChild(card);
+    });
+}
+
+// ── SWITCH FLOOR ───────────────────────────────────────
+function switchFloor(floor) {
+    currentFloor = floor;
+
+    document.querySelectorAll('.floor-btn').forEach((btn, i) => {
+        btn.classList.toggle('active', i + 1 === floor);
+    });
+
+    renderMap(floor);
+}
+
+// ── MODAL ──────────────────────────────────────────────
+function openModal(slot) {
+    selectedSlot = slot;
+    document.getElementById('modal-slot-number').textContent = slot.slot_number;
+    document.getElementById('modal-slot-type').value         = slot.slot_type;
+    document.getElementById('modal-slot-floor').value        = `Floor ${slot.floor}`;
+    document.getElementById('vehicle-number').value          = '';
+    document.getElementById('modal-alert').className         = 'alert';
+    document.getElementById('booking-modal').classList.add('active');
+}
+
+function closeModal() {
+    document.getElementById('booking-modal').classList.remove('active');
+    selectedSlot = null;
+}
+
+// ── CONFIRM BOOKING ────────────────────────────────────
+async function confirmBooking() {
+    const vehicleNumber = document.getElementById('vehicle-number').value.trim();
+
+    if (!vehicleNumber) {
+        const alertEl = document.getElementById('modal-alert');
+        alertEl.textContent = 'Please enter your vehicle number';
+        alertEl.className   = 'alert alert-error show';
+        return;
+    }
+
+    try {
+        const res  = await fetch(`${API}/api/bookings`, {
+            method:  'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body:    JSON.stringify({
+                user_id:        user.id,
+                slot_id:        selectedSlot.id,
+                vehicle_number: vehicleNumber
+            })
+        });
+        const data = await res.json();
+
+        if (res.ok) {
+            closeModal();
+            loadSlots();
+            alert(`✅ Booking confirmed!\nSlot: ${selectedSlot.slot_number}\nBooking ID: ${data.booking_id}`);
+        } else {
+            const alertEl = document.getElementById('modal-alert');
+            alertEl.textContent = data.error || 'Booking failed';
+            alertEl.className   = 'alert alert-error show';
+        }
+    } catch (err) {
+        console.error('Booking error:', err);
+    }
+}
+
+// ── CLOSE MODAL ON OUTSIDE CLICK ──────────────────────
+document.getElementById('booking-modal').addEventListener('click', function(e) {
+    if (e.target === this) closeModal();
+});
+
+// ── INIT ───────────────────────────────────────────────
+loadSlots();
+setInterval(loadSlots, 30000);
