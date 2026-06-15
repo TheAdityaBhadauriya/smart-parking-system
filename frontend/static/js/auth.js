@@ -1,4 +1,4 @@
-const API = 'https://smart-parking-system-918m.onrender.com';
+
 //v2
 // ── SWITCH TABS ────────────────────────────────────────
 function showTab(tab) {

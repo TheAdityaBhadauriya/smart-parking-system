@@ -1,4 +1,3 @@
-const API = 'https://smart-parking-system-918m.onrender.com';
 
 // ── CHECK LOGIN ────────────────────────────────────────
 const user = JSON.parse(localStorage.getItem('user'));
