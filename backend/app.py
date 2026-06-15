@@ -4,6 +4,7 @@ from routes.auth import auth
 from routes.slots import slots
 from routes.bookings import bookings
 from routes.payments import payments
+from routes.admin import admin
 import os
 
 # Tell Flask where the static and template folders are
@@ -17,6 +18,7 @@ app.register_blueprint(auth)
 app.register_blueprint(slots)
 app.register_blueprint(bookings)
 app.register_blueprint(payments)
+app.register_blueprint(admin)
 
 # ── SERVE FRONTEND PAGES ───────────────────────────────
 @app.route('/')
