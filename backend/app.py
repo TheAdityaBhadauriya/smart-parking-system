@@ -7,10 +7,9 @@ from routes.payments import payments
 from routes.admin import admin
 import os
 
-# Tell Flask where the static and template folders are
 app = Flask(__name__,
-    static_folder=os.path.join('..', 'frontend', 'static'),
-    template_folder=os.path.join('..', 'frontend', 'templates')
+    static_folder=os.path.join(os.path.dirname(__file__), '..', 'frontend', 'static'),
+    template_folder=os.path.join(os.path.dirname(__file__), '..', 'frontend', 'templates')
 )
 CORS(app)
 
@@ -20,14 +19,14 @@ app.register_blueprint(bookings)
 app.register_blueprint(payments)
 app.register_blueprint(admin)
 
-# ── SERVE FRONTEND PAGES ───────────────────────────────
 @app.route('/')
 def index():
-    return send_from_directory('../frontend/templates', 'index.html')
+    return send_from_directory(app.template_folder, 'index.html')
 
 @app.route('/<page>.html')
 def serve_page(page):
-    return send_from_directory('../frontend/templates', f'{page}.html')
+    return send_from_directory(app.template_folder, f'{page}.html')
 
 if __name__ == '__main__':
-    app.run(debug=True, port=5000)
+    port = int(os.environ.get('PORT', 5000))
+    app.run(debug=False, host='0.0.0.0', port=port)
