@@ -134,27 +134,16 @@ async function confirmBooking() {
                 end_time:       endTime
             })
         });
-
-    try {
-        const res  = await fetch(`${API}/api/bookings`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                user_id:        user.id,
-                slot_id:        selectedSlot.id,
-                vehicle_number: vehicleNumber
-            })
-        });
         const data = await res.json();
 
         if (res.ok) {
             closeModal();
-            loadSlots(); // Refresh the grid
+            loadSlots();
             alert(`✅ Booking confirmed! Booking ID: ${data.booking_id}`);
         } else {
             const alertEl = document.getElementById('modal-alert');
             alertEl.textContent = data.error || 'Booking failed';
-            alertEl.className = 'alert alert-error show';
+            alertEl.className   = 'alert alert-error show';
         }
     } catch (err) {
         console.error('Booking error:', err);
