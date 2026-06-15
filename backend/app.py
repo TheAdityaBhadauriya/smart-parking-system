@@ -1,5 +1,6 @@
 from flask import Flask, send_from_directory
 from flask_cors import CORS
+from flask_jwt_extended import JWTManager
 from routes.auth import auth
 from routes.slots import slots
 from routes.bookings import bookings
@@ -12,6 +13,11 @@ app = Flask(__name__,
     template_folder=os.path.join(os.path.dirname(__file__), '..', 'frontend', 'templates')
 )
 CORS(app)
+
+# JWT Configuration
+app.config['JWT_SECRET_KEY'] = os.environ.get('JWT_SECRET_KEY', 'smartpark-secret-2026')
+app.config['JWT_ACCESS_TOKEN_EXPIRES'] = 86400  # 24 hours
+jwt = JWTManager(app)
 
 app.register_blueprint(auth)
 app.register_blueprint(slots)

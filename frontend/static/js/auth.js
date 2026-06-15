@@ -42,11 +42,12 @@ async function login() {
         const data = await res.json();
 
         if (res.ok) {
-            // Save user info to browser storage
-            localStorage.setItem('user', JSON.stringify(data.user));
-            showAlert('Login successful! Redirecting...', 'success');
-            setTimeout(() => window.location.href = 'dashboard.html', 1000);
-        } else {
+        localStorage.setItem('user', JSON.stringify(data.user));
+        localStorage.setItem('token', data.token);
+        showAlert('Login successful! Redirecting...', 'success');
+        setTimeout(() => window.location.href = 'dashboard.html', 1000);
+        }
+        else {
             showAlert(data.error || 'Login failed');
         }
     } catch (err) {
