@@ -63,17 +63,29 @@
 
 </div>
 
-<!-- BOOKING MODAL -->
+<!-- BOOKING MODAL --> 
 <div class="modal-overlay" id="booking-modal">
     <div class="modal">
         <h3>Book Slot <span id="modal-slot-number"></span></h3>
-        <p>Enter your vehicle details to confirm booking</p>
+        <p>Select your parking time</p>
 
         <div class="alert" id="modal-alert"></div>
 
         <div class="form-group">
             <label>Vehicle Number</label>
             <input type="text" id="vehicle-number" placeholder="e.g. UP32 AB 1234">
+        </div>
+        <div class="form-group">
+            <label>Date</label>
+            <input type="date" id="booking-date" min="">
+        </div>
+        <div class="form-group">
+            <label>Start Time</label>
+            <input type="time" id="start-time">
+        </div>
+        <div class="form-group">
+            <label>End Time</label>
+            <input type="time" id="end-time">
         </div>
         <div class="form-group">
             <label>Slot Type</label>

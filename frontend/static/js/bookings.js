@@ -28,24 +28,24 @@ async function loadBookings() {
             return;
         }
 
-        tbody.innerHTML = bookings.map(b => `
-            <tr>
-                <td>${b.id}</td>
-                <td><strong>${b.slot_number}</strong></td>
-                <td>Floor ${b.floor}</td>
-                <td>${b.vehicle_number}</td>
-                <td>${formatDate(b.check_in)}</td>
-                <td>${b.check_out ? formatDate(b.check_out) : '—'}</td>
-                <td><span class="badge badge-${b.status}">${b.status}</span></td>
-                <td>
-                    ${b.status === 'active'
-                        ? `<a href="payment.html?booking_id=${b.id}" class="btn btn-success" 
-    style="padding:6px 14px; font-size:12px; text-decoration:none">💳 Pay & Checkout</a>`
-                        : '—'
-                    }
-                </td>
-            </tr>
-        `).join('');
+       tbody.innerHTML = bookings.map(b => `
+    <tr>
+        <td>${b.id}</td>
+        <td><strong>${b.slot_number}</strong></td>
+        <td>Floor ${b.floor}</td>
+        <td>${b.vehicle_number}</td>
+        <td>${b.booking_date || '—'}</td>
+        <td>${b.start_time ? b.start_time.substring(0,5) : '—'} → ${b.end_time ? b.end_time.substring(0,5) : '—'}</td>
+        <td><span class="badge badge-${b.status}">${b.status}</span></td>
+        <td>
+            ${b.status === 'active'
+                ? `<a href="payment.html?booking_id=${b.id}" class="btn btn-success" 
+                    style="padding:6px 14px; font-size:12px; text-decoration:none">💳 Pay & Checkout</a>`
+                : '—'
+            }
+        </td>
+    </tr>
+`).join('');
 
     } catch (err) {
         console.error('Error loading bookings:', err);
