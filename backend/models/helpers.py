@@ -2,7 +2,7 @@ from db import get_db
 
 def query_db(sql, args=(), one=False, commit=False):
     conn = get_db()
-    cursor = conn.cursor(dictionary=True)
+    cursor = conn.cursor(dictionary=True, buffered=True)  # buffered=True fixes unread result
     cursor.execute(sql, args)
 
     if commit:
