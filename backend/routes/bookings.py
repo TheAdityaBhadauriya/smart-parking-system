@@ -29,21 +29,20 @@ def create_booking():
         return jsonify({'error': 'Slot not found'}), 404
 
     # Check for time conflicts
-    conflict = query_db('''
-        SELECT id FROM bookings
+    existing = query_db('''
+        SELECT id, start_time, end_time FROM bookings
         WHERE slot_id = %s
         AND booking_date = %s
         AND status != 'cancelled'
-        AND (
-            (start_time < %s AND end_time > %s) OR
-            (start_time < %s AND end_time > %s) OR
-            (start_time >= %s AND end_time <= %s)
-        )
-    ''', (slot_id, booking_date,
-          end_time, start_time,
-          end_time, end_time,
-          start_time, end_time),
-    one=True)
+    ''', (slot_id, booking_date))
+
+    conflict = None
+    for b in existing:
+        b_start = str(b['start_time'])
+        b_end   = str(b['end_time'])
+        if not (end_time <= b_start or start_time >= b_end):
+            conflict = b
+            break
 
     if conflict:
         return jsonify({'error': 'Slot already booked for this time'}), 409
