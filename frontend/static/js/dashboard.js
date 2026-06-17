@@ -16,15 +16,15 @@ let selectedSlot = null;
 
 async function loadSlots() {
     try {
-        const res   = await fetch(`${API}/api/slots`);
+        const res = await fetch(`${API}/api/slots`);
         const slots = await res.json();
 
         // Update stats
         const available = slots.filter(s => s.status === 'available').length;
-        const occupied  = slots.filter(s => s.status === 'occupied').length;
-        document.getElementById('total-slots').textContent     = slots.length;
+        const occupied = slots.filter(s => s.status === 'occupied').length;
+        document.getElementById('total-slots').textContent = slots.length;
         document.getElementById('available-slots').textContent = available;
-        document.getElementById('occupied-slots').textContent  = occupied;
+        document.getElementById('occupied-slots').textContent = occupied;
 
         // Group by floor
         const floors = {};
@@ -47,7 +47,10 @@ async function loadSlots() {
 
             floors[floor].forEach(slot => {
                 const card = document.createElement('div');
-                card.className = `slot-card ${slot.status}`;
+                let slotClass = slot.status;
+                if (slot.status === 'available' && slot.slot_type === 'ev') slotClass = 'slot-ev';
+                if (slot.status === 'available' && slot.slot_type === 'disabled') slotClass = 'slot-disabled';
+                card.className = `slot-card ${slotClass}`;
                 card.innerHTML = `
                     <div class="slot-number">${slot.slot_number}</div>
                     <div class="slot-type">${slot.slot_type}</div>
@@ -74,23 +77,23 @@ async function loadSlots() {
 function openModal(slot) {
     selectedSlot = slot;
     document.getElementById('modal-slot-number').textContent = slot.slot_number;
-    document.getElementById('modal-slot-type').value         = slot.slot_type;
-    document.getElementById('modal-slot-floor').value        = `Floor ${slot.floor}`;
-    document.getElementById('vehicle-number').value          = '';
-    document.getElementById('modal-alert').className         = 'alert';
+    document.getElementById('modal-slot-type').value = slot.slot_type;
+    document.getElementById('modal-slot-floor').value = `Floor ${slot.floor}`;
+    document.getElementById('vehicle-number').value = '';
+    document.getElementById('modal-alert').className = 'alert';
 
     // Set minimum date to today
     const today = new Date().toISOString().split('T')[0];
-    document.getElementById('booking-date').min   = today;
+    document.getElementById('booking-date').min = today;
     document.getElementById('booking-date').value = today;
 
     // Set default times
-    const now  = new Date();
-    const h    = String(now.getHours()).padStart(2, '0');
-    const m    = String(now.getMinutes()).padStart(2, '0');
-    const h2   = String((now.getHours() + 1) % 24).padStart(2, '0');
+    const now = new Date();
+    const h = String(now.getHours()).padStart(2, '0');
+    const m = String(now.getMinutes()).padStart(2, '0');
+    const h2 = String((now.getHours() + 1) % 24).padStart(2, '0');
     document.getElementById('start-time').value = `${h}:${m}`;
-    document.getElementById('end-time').value   = `${h2}:${m}`;
+    document.getElementById('end-time').value = `${h2}:${m}`;
 
     document.getElementById('booking-modal').classList.add('active');
 }
@@ -102,35 +105,35 @@ function closeModal() {
 // ── CONFIRM BOOKING ────────────────────────────────────
 async function confirmBooking() {
     const vehicleNumber = document.getElementById('vehicle-number').value.trim();
-    const bookingDate   = document.getElementById('booking-date').value;
-    const startTime     = document.getElementById('start-time').value;
-    const endTime       = document.getElementById('end-time').value;
+    const bookingDate = document.getElementById('booking-date').value;
+    const startTime = document.getElementById('start-time').value;
+    const endTime = document.getElementById('end-time').value;
 
     if (!vehicleNumber || !bookingDate || !startTime || !endTime) {
         const alertEl = document.getElementById('modal-alert');
         alertEl.textContent = 'Please fill in all fields';
-        alertEl.className   = 'alert alert-error show';
+        alertEl.className = 'alert alert-error show';
         return;
     }
 
     if (startTime >= endTime) {
         const alertEl = document.getElementById('modal-alert');
         alertEl.textContent = 'End time must be after start time';
-        alertEl.className   = 'alert alert-error show';
+        alertEl.className = 'alert alert-error show';
         return;
     }
 
     try {
-        const res  = await fetch(`${API}/api/bookings`, {
+        const res = await fetch(`${API}/api/bookings`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
-                user_id:        user.id,
-                slot_id:        selectedSlot.id,
+                user_id: user.id,
+                slot_id: selectedSlot.id,
                 vehicle_number: vehicleNumber,
-                booking_date:   bookingDate,
-                start_time:     startTime,
-                end_time:       endTime
+                booking_date: bookingDate,
+                start_time: startTime,
+                end_time: endTime
             })
         });
         const data = await res.json();
@@ -142,7 +145,7 @@ async function confirmBooking() {
         } else {
             const alertEl = document.getElementById('modal-alert');
             alertEl.textContent = data.error || 'Booking failed';
-            alertEl.className   = 'alert alert-error show';
+            alertEl.className = 'alert alert-error show';
         }
     } catch (err) {
         console.error('Booking error:', err);
@@ -150,7 +153,7 @@ async function confirmBooking() {
 }
 
 // ── CLOSE MODAL ON OUTSIDE CLICK ──────────────────────
-document.getElementById('booking-modal').addEventListener('click', function(e) {
+document.getElementById('booking-modal').addEventListener('click', function (e) {
     if (e.target === this) closeModal();
 });
 

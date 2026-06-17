@@ -440,3 +440,21 @@ tbody tr:hover { background: #f8f9fa; }
     .slots-grid { grid-template-columns: repeat(3, 1fr); }
     .auth-box { margin: 20px; padding: 25px; }
 }
+/* ── SLOT TYPE COLORS ── */
+.slot-card.slot-ev {
+    border-color: #667eea;
+    background: linear-gradient(135deg, #f0f4ff, #ffffff);
+}
+
+.slot-card.slot-ev .slot-status {
+    color: #667eea;
+}
+
+.slot-card.slot-disabled {
+    border-color: #f7971e;
+    background: linear-gradient(135deg, #fffaf0, #ffffff);
+}
+
+.slot-card.slot-disabled .slot-status {
+    color: #f7971e;
+}
