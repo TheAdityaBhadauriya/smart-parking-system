@@ -2,6 +2,15 @@
 
 A full-stack web application for managing parking slots in real time — built with Python (Flask), MySQL, and vanilla JavaScript.
 
+
+![Python](https://img.shields.io/badge/Python-3.x-blue)
+![Flask](https://img.shields.io/badge/Flask-3.x-green)
+![MySQL](https://img.shields.io/badge/MySQL-8.x-orange)
+![JWT](https://img.shields.io/badge/JWT-Auth-red)
+![Razorpay](https://img.shields.io/badge/Razorpay-Payment-blue)
+![Render](https://img.shields.io/badge/Deployed-Render-purple)
+[![Live Demo](https://img.shields.io/badge/Live_Demo-Click_Here-brightgreen)](https://smart-parking-system-918m.onrender.com)
+
 ![Dashboard Preview](screenshots/dashboard.png)
 
 ---
