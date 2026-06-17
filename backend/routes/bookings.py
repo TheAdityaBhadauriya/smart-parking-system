@@ -112,7 +112,10 @@ def get_available_slots():
 def get_user_bookings(user_id):
     user_bookings = query_db('''
         SELECT b.id, b.vehicle_number, b.check_in, b.check_out,
-               b.status, b.booking_date, b.start_time, b.end_time,
+               b.status, 
+               DATE_FORMAT(b.booking_date, '%Y-%m-%d') as booking_date,
+               TIME_FORMAT(b.start_time, '%H:%i') as start_time,
+               TIME_FORMAT(b.end_time, '%H:%i') as end_time,
                p.slot_number, p.floor
         FROM bookings b
         JOIN parking_slots p ON b.slot_id = p.id
@@ -152,7 +155,10 @@ def checkout(booking_id):
 def get_all_bookings():
     all_bookings = query_db('''
         SELECT b.id, b.vehicle_number, b.check_in, b.check_out,
-               b.status, b.booking_date, b.start_time, b.end_time,
+               b.status,
+               DATE_FORMAT(b.booking_date, '%Y-%m-%d') as booking_date,
+               TIME_FORMAT(b.start_time, '%H:%i') as start_time,
+               TIME_FORMAT(b.end_time, '%H:%i') as end_time,
                u.name AS user_name, u.email,
                p.slot_number, p.floor
         FROM bookings b
