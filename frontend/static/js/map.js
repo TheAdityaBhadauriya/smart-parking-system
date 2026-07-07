@@ -50,9 +50,16 @@ async function checkAvailability() {
         const data = await res.json();
 
         allSlots = data;
-        bookedIds = data.filter(s => !s.available_for_time).map(s => s.id);
-        renderMap(currentFloor);
+bookedIds = data.filter(s => !s.available_for_time).map(s => s.id);
 
+// Update stats
+const available = data.filter(s => s.available_for_time).length;
+const occupied  = data.filter(s => !s.available_for_time).length;
+document.getElementById('total-slots').textContent     = data.length;
+document.getElementById('available-slots').textContent = available;
+document.getElementById('occupied-slots').textContent  = occupied;
+
+renderMap(currentFloor);
     } catch (err) {
         console.error('Error checking availability:', err);
     }
