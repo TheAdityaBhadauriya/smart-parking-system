@@ -230,4 +230,3 @@ document.getElementById('booking-modal').addEventListener('click', function(e) {
 // ── INIT ───────────────────────────────────────────────
 setDefaultDateTime();
 loadSlots();
-setInterval(loadSlots, 30000);
