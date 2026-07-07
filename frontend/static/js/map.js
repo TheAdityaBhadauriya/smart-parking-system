@@ -174,6 +174,10 @@ function closeModal() {
 
 // ── CONFIRM BOOKING ────────────────────────────────────
 async function confirmBooking() {
+    // Disable button to prevent double booking
+    const btn = document.querySelector('.modal .btn-success');
+    btn.disabled = true;
+    btn.textContent = '⏳ Processing...';
     const vehicleNumber = document.getElementById('vehicle-number').value.trim();
     const bookingDate   = document.getElementById('booking-date').value;
     const startTime     = document.getElementById('start-time').value;
@@ -212,11 +216,13 @@ async function confirmBooking() {
             closeModal();
             checkAvailability();
             alert(`✅ Booking confirmed!\nSlot: ${selectedSlot.slot_number}\nBooking ID: ${data.booking_id}`);
-        } else {
-            const alertEl = document.getElementById('modal-alert');
-            alertEl.textContent = data.error || 'Booking failed';
-            alertEl.className   = 'alert alert-error show';
-        }
+        }else {
+    const alertEl = document.getElementById('modal-alert');
+    alertEl.textContent = data.error || 'Booking failed';
+    alertEl.className   = 'alert alert-error show';
+    btn.disabled = false;
+    btn.textContent = 'Confirm Booking';
+}
     } catch (err) {
         console.error('Booking error:', err);
     }
