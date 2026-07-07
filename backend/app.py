@@ -7,6 +7,8 @@ from routes.bookings import bookings
 from routes.payments import payments
 from routes.admin import admin
 import os
+import threading
+import time
 
 app = Flask(__name__,
     static_folder=os.path.join(os.path.dirname(__file__), '..', 'frontend', 'static'),
@@ -16,7 +18,7 @@ CORS(app)
 
 # JWT Configuration
 app.config['JWT_SECRET_KEY'] = os.environ.get('JWT_SECRET_KEY', 'smartpark-secret-2026')
-app.config['JWT_ACCESS_TOKEN_EXPIRES'] = 86400  # 24 hours
+app.config['JWT_ACCESS_TOKEN_EXPIRES'] = 86400
 jwt = JWTManager(app)
 
 app.register_blueprint(auth)
@@ -32,6 +34,23 @@ def index():
 @app.route('/<page>.html')
 def serve_page(page):
     return send_from_directory(app.template_folder, f'{page}.html')
+
+# ── KEEP AIVEN ALIVE ───────────────────────────────────
+def keep_alive():
+    while True:
+        try:
+            from db import get_db
+            conn = get_db()
+            cursor = conn.cursor()
+            cursor.execute('SELECT 1')
+            cursor.close()
+            conn.close()
+        except:
+            pass
+        time.sleep(300)  # ping every 5 minutes
+
+thread = threading.Thread(target=keep_alive, daemon=True)
+thread.start()
 
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 5000))
