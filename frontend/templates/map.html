@@ -47,22 +47,20 @@
         <button class="floor-btn" onclick="switchFloor(2)">Floor 2</button>
     </div>
 <!-- TIME FILTER -->
-<div class="card" style="margin-bottom:20px; padding:15px">
-    <div style="display:flex; gap:15px; align-items:end; flex-wrap:wrap">
-        <div class="form-group" style="margin:0">
-            <label>Date</label>
-            <input type="date" id="filter-date" style="padding:10px; border:2px solid #e1e5e9; border-radius:8px">
-        </div>
-        <div class="form-group" style="margin:0">
-            <label>Start Time</label>
-            <input type="time" id="filter-start" style="padding:10px; border:2px solid #e1e5e9; border-radius:8px">
-        </div>
-        <div class="form-group" style="margin:0">
-            <label>End Time</label>
-            <input type="time" id="filter-end" style="padding:10px; border:2px solid #e1e5e9; border-radius:8px">
-        </div>
-        <button class="btn btn-primary" onclick="checkAvailability()">Check Availability</button>
+<div class="time-filter">
+    <div class="form-group">
+        <label>Date</label>
+        <input type="date" id="filter-date">
     </div>
+    <div class="form-group">
+        <label>Start Time</label>
+        <input type="time" id="filter-start">
+    </div>
+    <div class="form-group">
+        <label>End Time</label>
+        <input type="time" id="filter-end">
+    </div>
+    <button class="btn btn-primary" onclick="checkAvailability()">Check Availability</button>
 </div>
     <!-- LEGEND -->
     <div class="legend">

@@ -237,9 +237,7 @@ body {
 }
 
 /* ── PARKING GRID ── */
-.floor-section {
-    margin-bottom: 30px;
-}
+.floor-section { margin-bottom: 30px; }
 
 .floor-title {
     font-size: 16px;
@@ -254,58 +252,61 @@ body {
 .slots-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
-    gap: 12px;
+    gap: 10px;
 }
 
 .slot-card {
-    background: white;
-    border-radius: 10px;
-    padding: 15px 10px;
+    border-radius: 8px;
+    padding: 12px 8px;
     text-align: center;
     cursor: pointer;
-    transition: all 0.2s;
     border: 2px solid transparent;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    transition: transform 0.15s;
 }
 
-.slot-card:hover { transform: translateY(-3px); box-shadow: 0 6px 20px rgba(0,0,0,0.12); }
+.slot-card:hover { transform: translateY(-3px); }
 
 .slot-card.available {
-    border-color: #38ef7d;
+    background: #e8faf0;
+    border-color: #38c172;
 }
 
-.slot-card.available .slot-status {
-    color: #11998e;
-}
+.slot-card.available .slot-status { color: #1a6a3a; }
+.slot-card.available .slot-number { color: #1a6a3a; }
+.slot-card.available .slot-type   { color: #2d8a50; }
 
 .slot-card.occupied {
-    border-color: #f45c43;
-    opacity: 0.7;
+    background: #fdf0f0;
+    border-color: #e74c3c;
+    opacity: 0.8;
     cursor: not-allowed;
 }
 
-.slot-card.occupied .slot-status {
-    color: #eb3349;
+.slot-card.occupied .slot-status { color: #7b2020; }
+.slot-card.occupied .slot-number { color: #7b2020; }
+.slot-card.occupied .slot-type   { color: #a03030; }
+
+.slot-card.slot-ev {
+    background: #eef2ff;
+    border-color: #667eea;
 }
 
-.slot-number {
-    font-size: 22px;
-    font-weight: 700;
-    color: #1a1a2e;
+.slot-card.slot-ev .slot-status { color: #2d3a8a; }
+.slot-card.slot-ev .slot-number { color: #2d3a8a; }
+.slot-card.slot-ev .slot-type   { color: #4a58b0; }
+
+.slot-card.slot-disabled {
+    background: #fff8ee;
+    border-color: #f7971e;
 }
 
-.slot-type {
-    font-size: 11px;
-    color: #888;
-    margin: 4px 0;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-}
+.slot-card.slot-disabled .slot-status { color: #7a4a00; }
+.slot-card.slot-disabled .slot-number { color: #7a4a00; }
+.slot-card.slot-disabled .slot-type   { color: #9a6010; }
 
-.slot-status {
-    font-size: 12px;
-    font-weight: 600;
-}
+.slot-number { font-size: 20px; font-weight: 500; }
+.slot-type   { font-size: 10px; color: #888; margin: 4px 0; text-transform: uppercase; letter-spacing: 0.5px; }
+.slot-status { font-size: 12px; font-weight: 600; }
 
 /* ── LEGEND ── */
 .legend {
@@ -329,8 +330,8 @@ body {
     border-radius: 50%;
 }
 
-.legend-dot.available { background: #38ef7d; }
-.legend-dot.occupied  { background: #f45c43; }
+.legend-dot.available { background: #38c172; }
+.legend-dot.occupied  { background: #e74c3c; }
 .legend-dot.ev        { background: #667eea; }
 .legend-dot.disabled  { background: #f7971e; }
 
